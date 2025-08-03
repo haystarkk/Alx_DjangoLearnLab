@@ -1,33 +1,35 @@
 from relationship_app.models import Author, Book, Library, Librarian
 
-# Query 1: Query all books by a specific author
-author_name = "John Fred"  
-try:
-    author = Author.objects.get(name=author_name)
+# Query all books by a specific author
+author_name = "Fred Connor"  
+authors = Author.objects.filter(name=author_name)
+if authors.exists():
+    author = authors.first()
     books = Book.objects.filter(author=author)
-    print(f"Books by {author_name}:")
     for book in books:
         print(book.title)
-except Author.DoesNotExist:
+else:
     print("Author not found.")
 
-
-# Query 2: List all books in a library
+# List all books in a library
 library_name = "Central Library"  
-try:
-    library = Library.objects.get(name=library_name)
+libraries = Library.objects.filter(name=library_name)
+if libraries.exists():
+    library = libraries.first()
     books = library.books.all()
-    print(f"\nBooks in {library_name}:")
     for book in books:
         print(book.title)
-except Library.DoesNotExist:
+else:
     print("Library not found.")
 
-
-# Query 3: Retrieve the librarian for a library
-try:
-    library = Library.objects.get(name=library_name)
-    librarian = Librarian.objects.get(library=library)
-    print(f"\nLibrarian of {library_name}: {librarian.name}")
-except (Library.DoesNotExist, Librarian.DoesNotExist):
-    print("Librarian or Library not found.")
+# Retrieve the librarian for a library
+if libraries.exists():
+    library = libraries.first()
+    librarians = Librarian.objects.filter(library=library)
+    if librarians.exists():
+        librarian = librarians.first()
+        print(librarian.name)
+    else:
+        print("Librarian not found.")
+else:
+    print("Library not found.")
