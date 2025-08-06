@@ -2,22 +2,28 @@ from rest_framework import serializers
 from .models import Author, Book
 import datetime
 
-# Serializer for the Book model
 class BookSerializer(serializers.ModelSerializer):
+    """
+    Serializes the Book model and includes validation for the publication year.
+    """
     class Meta:
         model = Book
-        fields = ['title', 'publication_year', 'author']
+        fields = '__all__'
 
-    # Custom validation to ensure publication year is not in the future
     def validate_publication_year(self, value):
-        current_year = datetime.datetime.now().year
+        """
+        Ensure the publication year is not in the future.
+        """
+        current_year = datetime.date.today().year
         if value > current_year:
             raise serializers.ValidationError("Publication year cannot be in the future.")
         return value
 
-# Serializer for the Author model with nested books
 class AuthorSerializer(serializers.ModelSerializer):
-    # Nested representation of related books
+    """
+    Serializes the Author model including nested BookSerializer
+    to show all books written by the author.
+    """
     books = BookSerializer(many=True, read_only=True)
 
     class Meta:
