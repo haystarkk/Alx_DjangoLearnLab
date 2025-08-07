@@ -1,14 +1,21 @@
 from django.urls import path
 from .views import (
-    BookListCreateView,
-    BookDetailView,
-    BookUpdateView,
-    BookDeleteView
+    book_list,
+    book_detail,
+    book_update,
+    book_delete
 )
 
 urlpatterns = [
-    path('books/', BookListCreateView.as_view(), name='book-list'),
-    path('books/<int:pk>/', BookDetailView.as_view(), name='book-detail'),
-    path('books/update/<int:pk>/', BookUpdateView.as_view(), name='book-update'),
-    path('books/delete/<int:pk>/', BookDeleteView.as_view(), name='book-delete'),
+    # Basic CRUD endpoints
+    path('books/', book_list, name='book-list'),
+    path('books/<int:pk>/', book_detail, name='book-detail'),
+    
+    # Explicit update/delete endpoints
+    path('books/update/<int:pk>/', book_update, name='book-update'),
+    path('books/delete/<int:pk>/', book_delete, name='book-delete'),
+    
+    # Alternative RESTful structure (optional)
+    path('books/<int:pk>/update/', book_update, name='book-update-alt'),
+    path('books/<int:pk>/delete/', book_delete, name='book-delete-alt'),
 ]
