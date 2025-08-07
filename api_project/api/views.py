@@ -1,23 +1,19 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, permissions
 from .models import Book
 from .serializers import BookSerializer
+from .permissions import IsAdminOrReadOnly  # Custom permission we'll create
 
 class BookViewSet(viewsets.ModelViewSet):
     """
-    A ViewSet for performing CRUD operations on Books.
-    Provides the following actions:
-    - list: GET /books_all/
-    - create: POST /books_all/
-    - retrieve: GET /books_all/<pk>/
-    - update: PUT /books_all/<pk>/
-    - partial_update: PATCH /books_all/<pk>/
-    - destroy: DELETE /books_all/<pk>/
+    API endpoint that allows books to be viewed or edited.
     """
     queryset = Book.objects.all()
     serializer_class = BookSerializer
+    permission_classes = [permissions.IsAuthenticated, IsAdminOrReadOnly]
 
-# Keep the existing BookList view if needed for backward compatibility
-from rest_framework import generics
-class BookList(generics.ListAPIView):
-    queryset = Book.objects.all()
-    serializer_class = BookSerializer
+    def get_permissions(self):
+        if self.action == 'create':
+            self.permission_classes = [permissions.IsAuthenticated]
+        elif self.action in ['update', 'partial_update', 'destroy']:
+            self.permission_classes = [permissions.IsAdminUser]
+        return super().get_permissions()
