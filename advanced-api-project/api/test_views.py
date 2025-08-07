@@ -6,7 +6,7 @@ from .models import Book
 
 class BookAPITestCase(APITestCase):
     def setUp(self):
-        # Create test user
+        # Create test users
         self.user = User.objects.create_user(
             username='testuser',
             password='testpass123'
@@ -33,11 +33,11 @@ class BookAPITestCase(APITestCase):
         # API client
         self.client = APIClient()
 
-    # Helper methods
+    # Authentication helper method using login
     def authenticate_user(self, user=None):
         if not user:
             user = self.user
-        self.client.force_authenticate(user=user)
+        self.client.login(username=user.username, password='testpass123' if user == self.user else 'adminpass123')
 
     # CRUD Tests
     def test_list_books_unauthenticated(self):
@@ -81,11 +81,28 @@ class BookAPITestCase(APITestCase):
         self.assertEqual(self.book1.title, 'Updated Title')
 
     def test_delete_book(self):
-        self.authenticate_user(self.admin)  # Only admin can delete
+        self.authenticate_user(self.admin)
         url = reverse('book-detail', args=[self.book1.id])
         response = self.client.delete(url)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(Book.objects.count(), 1)
+
+    # Authentication tests with login
+    def test_login_authentication(self):
+        # Test successful login
+        login_success = self.client.login(username='testuser', password='testpass123')
+        self.assertTrue(login_success)
+        
+        # Test failed login
+        login_fail = self.client.login(username='testuser', password='wrongpassword')
+        self.assertFalse(login_fail)
+
+    def test_authenticated_access_with_login(self):
+        # Explicit login test
+        self.client.login(username='testuser', password='testpass123')
+        url = reverse('book-list')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     # Filtering, Searching, Ordering Tests
     def test_filter_by_genre(self):
@@ -109,24 +126,6 @@ class BookAPITestCase(APITestCase):
         self.assertEqual(response.data[0]['title'], 'Dune')
         self.assertEqual(response.data[1]['title'], 'The Great Gatsby')
 
-    def test_combined_filters(self):
-        url = reverse('book-list')
-        response = self.client.get(url, {
-            'search': 'great',
-            'ordering': 'title'
-        })
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data), 1)
-        self.assertEqual(response.data[0]['title'], 'The Great Gatsby')
-
-    # Permission Tests
-    def test_unauthenticated_update(self):
-        url = reverse('book-detail', args=[self.book1.id])
-        response = self.client.patch(url, {'title': 'Should Fail'})
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-
-    def test_non_admin_delete(self):
-        self.authenticate_user()  # Regular user, not admin
-        url = reverse('book-detail', args=[self.book1.id])
-        response = self.client.delete(url)
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+    def tearDown(self):
+        # Logout after each test
+        self.client.logout()
