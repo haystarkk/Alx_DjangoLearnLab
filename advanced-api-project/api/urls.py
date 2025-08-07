@@ -8,9 +8,9 @@ urlpatterns = [
     path('books/create/', views.BookCreateView.as_view(), name='book-create'),
     path('books/<int:pk>/', views.BookDetailView.as_view(), name='book-detail'),
     path('books/<int:pk>/update/', views.BookUpdateView.as_view(), 
-        name='book-update'),
+        name='book-update'),  # Explicit update endpoint
     path('books/<int:pk>/delete/', views.BookDeleteView.as_view(), 
-        name='book-delete'),
+        name='book-delete'),  # Explicit delete endpoint
     
     # Author endpoints
     path('authors/', views.AuthorListView.as_view(), name='author-list'),
