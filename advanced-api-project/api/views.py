@@ -1,19 +1,39 @@
 from rest_framework import generics
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
-from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
+from django_filters import rest_framework as filters  # Correct import
 from rest_framework.filters import SearchFilter, OrderingFilter
 from .models import Book
 from .serializers import BookSerializer
 
 class BookListCreateView(generics.ListCreateAPIView):
+    """
+    API endpoint that allows books to be viewed or created.
+    
+    Filtering:
+    - title: exact match or contains (icontains)
+    - author: exact match or contains (icontains)
+    - publication_year: exact, gte (greater than or equal), lte (less than or equal)
+    - genre: exact match
+    
+    Searching:
+    - Searches across title, author, and description fields
+    
+    Ordering:
+    - title, author, publication_year, created_at
+    - Add '-' prefix for descending order
+    - Default ordering: title (ascending)
+    """
     queryset = Book.objects.all()
     serializer_class = BookSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
     
     # Filtering, Searching & Ordering configuration
-    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    filter_backends = [
+        filters.DjangoFilterBackend,  # Using the imported filters
+        SearchFilter,
+        OrderingFilter
+    ]
     
-    # Filtering fields
     filterset_fields = {
         'title': ['exact', 'icontains'],
         'author': ['exact', 'icontains'],
@@ -21,12 +41,9 @@ class BookListCreateView(generics.ListCreateAPIView):
         'genre': ['exact'],
     }
     
-    # Search fields
     search_fields = ['title', 'author', 'description']
-    
-    # Ordering fields
     ordering_fields = ['title', 'author', 'publication_year', 'created_at']
-    ordering = ['title']  # Default ordering
+    ordering = ['title']
 
 class BookRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Book.objects.all()
