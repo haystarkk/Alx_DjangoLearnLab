@@ -1,37 +1,213 @@
+/* Main Layout */
 body {
-    font-family: Arial, sans-serif;
+    background: #f8f9fa;
+    color: #212529;
+    margin-top: 70px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     line-height: 1.6;
-    margin: 0;
-    padding: 0;
-    color: #333;
 }
 
-header {
-    background: #0078d7;
-    color: white;
-    padding: 1rem 0;
-    text-align: center;
+.container {
+    max-width: 1200px;
+    padding: 0 15px;
 }
 
-header a {
-    color: white;
+/* Header & Navigation */
+.site-header {
+    background-color: #0d6efd;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+.navbar-brand {
+    font-weight: 700;
+    font-size: 1.5rem;
+}
+
+.navbar-nav .nav-link {
+    padding: 0.5rem 1rem;
+    font-weight: 500;
+}
+
+.nav-profile-img {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin-right: 8px;
+    object-fit: cover;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+}
+
+.dropdown-menu {
+    border: none;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+}
+
+.dropdown-item {
+    padding: 0.5rem 1.5rem;
+}
+
+/* Content Sections */
+.content-section {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    margin-bottom: 30px;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/* Posts & Articles */
+.article-metadata {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.article-img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 15px;
+}
+
+.article-title {
+    color: #0d6efd;
+    font-size: 1.75rem;
+    margin-bottom: 15px;
+    transition: color 0.2s;
+}
+
+.article-title:hover {
+    color: #0b5ed7;
     text-decoration: none;
 }
 
-main {
-    padding: 2rem;
-    max-width: 800px;
-    margin: 0 auto;
+.article-content {
+    white-space: pre-line;
+    font-size: 1.05rem;
+    line-height: 1.8;
 }
 
-article {
-    margin-bottom: 2rem;
-    padding-bottom: 1rem;
-    border-bottom: 1px solid #eee;
+/* Forms */
+.form-group {
+    margin-bottom: 1.5rem;
 }
 
-footer {
-    text-align: center;
-    padding: 1rem 0;
-    background: #f4f4f4;
+.form-control {
+    padding: 10px 15px;
+    border-radius: 6px;
+    border: 1px solid #ced4da;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.form-control:focus {
+    border-color: #86b7fe;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+.btn {
+    padding: 8px 20px;
+    border-radius: 6px;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.btn-outline-info {
+    color: #0d6efd;
+    border-color: #0d6efd;
+}
+
+.btn-outline-info:hover {
+    background-color: #0d6efd;
+    color: white;
+}
+
+/* Alerts & Messages */
+.alert {
+    padding: 15px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+}
+
+.alert-success {
+    background-color: #d1e7dd;
+    border-color: #badbcc;
+    color: #0f5132;
+}
+
+.alert-danger {
+    background-color: #f8d7da;
+    border-color: #f5c2c7;
+    color: #842029;
+}
+
+.alert-info {
+    background-color: #cfe2ff;
+    border-color: #b6d4fe;
+    color: #084298;
+}
+
+/* Pagination */
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+.page-item.active .page-link {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+}
+
+.page-link {
+    color: #0d6efd;
+    margin: 0 5px;
+    border-radius: 6px !important;
+}
+
+/* Sidebar */
+.sidebar {
+    position: sticky;
+    top: 90px;
+}
+
+.list-group-item {
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    margin-bottom: 5px;
+    border-radius: 6px !important;
+    transition: all 0.2s;
+}
+
+.list-group-item:hover {
+    background-color: #f8f9fa;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .sidebar {
+        margin-top: 30px;
+    }
+    
+    .article-img {
+        width: 50px;
+        height: 50px;
+    }
+}
+
+@media (max-width: 576px) {
+    body {
+        margin-top: 60px;
+    }
+    
+    .navbar-brand {
+        font-size: 1.25rem;
+    }
 }
