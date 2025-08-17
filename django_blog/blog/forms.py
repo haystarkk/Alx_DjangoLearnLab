@@ -12,13 +12,16 @@ class PostForm(forms.ModelForm):
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control'}),
             'content': forms.Textarea(attrs={'class': 'form-control', 'rows': 6}),
-            'tags': TagWidget(attrs={'class': 'form-control'}),
+            'tags': TagWidget(attrs={
+                'class': 'form-control',
+                'placeholder': 'Add tags separated by commas'
+            }),
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
-        self.helper.add_input(Submit('submit', 'Submit'))
+        self.helper.add_input(Submit('submit', 'Submit', css_class='btn-primary'))
 
 class CommentForm(forms.ModelForm):
     class Meta:
@@ -35,4 +38,4 @@ class CommentForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
-        self.helper.add_input(Submit('submit', 'Post Comment'))
+        self.helper.add_input(Submit('submit', 'Post Comment', css_class='btn-primary'))
