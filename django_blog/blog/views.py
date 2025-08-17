@@ -9,8 +9,10 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse_lazy
 from .models import Post, Comment
 from .forms import CommentForm
+from django.views.generic import ListView
+from .models import Post
+from .search import post_search
 
-# Post Views (keep your existing Post views)
 class PostListView(ListView):
     model = Post
     template_name = 'blog/home.html'
@@ -74,7 +76,6 @@ class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     def get_success_url(self):
         return reverse_lazy('post-detail', kwargs={'pk': self.object.post.pk})
 
-# User Posts View (keep if you have it)
 class UserPostListView(ListView):
     model = Post
     template_name = 'blog/user_posts.html'
@@ -84,17 +85,34 @@ class UserPostListView(ListView):
     def get_queryset(self):
         user = get_object_or_404(User, username=self.kwargs.get('username'))
         return Post.objects.filter(author=user).order_by('-date_posted')
+class TaggedPostListView(ListView):
+    model = Post
+    template_name = 'blog/tagged_posts.html'
+    context_object_name = 'posts'
+    paginate_by = 5
 
-# Authentication Views (keep your existing auth views)
+    def get_queryset(self):
+        tag = self.kwargs.get('tag')
+        return Post.objects.filter(tags__name__in=[tag])
+
+class SearchResultsView(ListView):
+    model = Post
+    template_name = 'blog/search_results.html'
+    context_object_name = 'posts'
+    paginate_by = 5
+
+    def get_queryset(self):
+        query = self.request.GET.get('q')
+        return post_search(query)
+
+
 def register(request):
-    # ... your existing register view ...
 
 def user_login(request):
-    # ... your existing login view ...
 
 @login_required
 def user_logout(request):
-    # ... your existing logout view ...
+    
 
 @login_required
 def profile(request):
