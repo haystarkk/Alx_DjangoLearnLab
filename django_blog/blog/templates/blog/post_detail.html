@@ -18,4 +18,46 @@
             <p class="article-content">{{ object.content }}</p>
         </div>
     </article>
+    <!-- Comments Section -->
+    <div class="content-section">
+        <h4>Comments ({{ comments.count }})</h4>
+        {% for comment in comments %}
+            <div class="comment mb-3 p-3 border rounded">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <img class="rounded-circle comment-img" src="{{ comment.author.profile.profile_pic.url }}">
+                        <a class="mr-2" href="{% url 'user-posts' comment.author.username %}">
+                            {{ comment.author.username }}
+                        </a>
+                        <small class="text-muted">{{ comment.created_at|date:"F d, Y H:i" }}</small>
+                    </div>
+                    {% if comment.author == user or comment.post.author == user %}
+                    <div>
+                        <a href="{% url 'edit-comment' comment.pk %}" class="btn btn-sm btn-outline-secondary">Edit</a>
+                        <a href="{% url 'delete-comment' comment.pk %}" class="btn btn-sm btn-outline-danger">Delete</a>
+                    </div>
+                    {% endif %}
+                </div>
+                <p class="mt-2">{{ comment.content }}</p>
+                {% if comment.updated_at != comment.created_at %}
+                    <small class="text-muted">Edited: {{ comment.updated_at|date:"F d, Y H:i" }}</small>
+                {% endif %}
+            </div>
+        {% empty %}
+            <p>No comments yet. Be the first to comment!</p>
+        {% endfor %}
+
+        {% if user.is_authenticated %}
+        <div class="mt-4">
+            <h5>Add a comment</h5>
+            <form method="POST" action="{% url 'add-comment' object.pk %}">
+                {% csrf_token %}
+                {{ comment_form|crispy }}
+                <button class="btn btn-info mt-2" type="submit">Post Comment</button>
+            </form>
+        </div>
+        {% else %}
+            <p><a href="{% url 'login' %}">Log in</a> to leave a comment.</p>
+        {% endif %}
+    </div>
 {% endblock content %}
