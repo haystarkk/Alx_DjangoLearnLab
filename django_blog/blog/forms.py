@@ -1,6 +1,9 @@
+# blog/forms.py
 from django import forms
 from .models import Post, Comment
 from taggit.forms import TagWidget
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Submit
 
 class PostForm(forms.ModelForm):
     class Meta:
@@ -8,14 +11,19 @@ class PostForm(forms.ModelForm):
         fields = ['title', 'content', 'tags']
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control'}),
-            'content': forms.Textarea(attrs={'class': 'form-control'}),
+            'content': forms.Textarea(attrs={'class': 'form-control', 'rows': 6}),
             'tags': TagWidget(attrs={'class': 'form-control'}),
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.add_input(Submit('submit', 'Submit'))
 
 class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
-        fields = ('content',)
+        fields = ['content']
         widgets = {
             'content': forms.Textarea(attrs={
                 'class': 'form-control',
@@ -23,3 +31,8 @@ class CommentForm(forms.ModelForm):
                 'placeholder': 'Write your comment here...'
             }),
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.add_input(Submit('submit', 'Post Comment'))
