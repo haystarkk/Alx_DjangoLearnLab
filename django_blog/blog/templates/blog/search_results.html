@@ -1,0 +1,12 @@
+{% extends "blog/base.html" %}
+{% block content %}
+    <h2 class="mb-4">Search Results for "{{ request.GET.q }}"</h2>
+    {% if posts %}
+        {% for post in posts %}
+            {% include 'blog/post_card.html' %}
+        {% endfor %}
+    {% else %}
+        <p>No results found for your search.</p>
+    {% endif %}
+    {% include 'blog/pagination.html' %}
+{% endblock content %}
