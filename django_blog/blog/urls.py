@@ -1,15 +1,31 @@
 # blog/urls.py
 from django.urls import path
 from .views import (
-    PostListView, PostDetailView, PostCreateView,
-    PostUpdateView, PostDeleteView, add_comment,
-    edit_comment, delete_comment
+    PostListView, PostDetailView,
+    PostCreateView, PostUpdateView, PostDeleteView,
+    CommentCreateView, CommentUpdateView, CommentDeleteView,
+    UserPostListView, register, user_login, user_logout, profile
 )
 
 urlpatterns = [
-    # ... (your existing URLs) ...
+    # Post URLs
+    path('', PostListView.as_view(), name='blog-home'),
     path('post/<int:pk>/', PostDetailView.as_view(), name='post-detail'),
-    path('post/<int:pk>/comment/', add_comment, name='add-comment'),
-    path('comment/<int:pk>/edit/', edit_comment, name='edit-comment'),
-    path('comment/<int:pk>/delete/', delete_comment, name='delete-comment'),
+    path('post/new/', PostCreateView.as_view(), name='post-create'),
+    path('post/<int:pk>/update/', PostUpdateView.as_view(), name='post-update'),
+    path('post/<int:pk>/delete/', PostDeleteView.as_view(), name='post-delete'),
+    
+    # Comment URLs
+    path('post/<int:pk>/comment/', CommentCreateView.as_view(), name='add-comment'),
+    path('comment/<int:pk>/update/', CommentUpdateView.as_view(), name='update-comment'),
+    path('comment/<int:pk>/delete/', CommentDeleteView.as_view(), name='delete-comment'),
+    
+    # User URLs
+    path('user/<str:username>/', UserPostListView.as_view(), name='user-posts'),
+    
+    # Auth URLs
+    path('register/', register, name='register'),
+    path('login/', user_login, name='login'),
+    path('logout/', user_logout, name='logout'),
+    path('profile/', profile, name='profile'),
 ]
