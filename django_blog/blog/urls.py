@@ -5,6 +5,7 @@ from .views import (
     CommentCreateView, CommentUpdateView, CommentDeleteView,
     UserPostListView, register, user_login, user_logout, profile
 )
+from .views import TaggedPostListView, SearchResultsView
 
 urlpatterns = [
     # Post URLs
@@ -27,4 +28,10 @@ urlpatterns = [
     path('login/', user_login, name='login'),
     path('logout/', user_logout, name='logout'),
     path('profile/', profile, name='profile'),
+]
+urlpatterns = [
+    ...
+    path('tags/<slug:tag>/', TaggedPostListView.as_view(), name='tagged-posts'),
+    path('search/', SearchResultsView.as_view(), name='search-results'),
+    ...
 ]
