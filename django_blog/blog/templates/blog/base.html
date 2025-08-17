@@ -52,6 +52,13 @@
         </nav>
     </header>
 
+<form class="d-flex ms-auto" action="{% url 'search-results' %}" method="get">
+    <div class="input-group">
+        <input class="form-control" type="search" name="q" placeholder="Search posts..." aria-label="Search">
+        <button class="btn btn-outline-success" type="submit">Search</button>
+    </div>
+</form>
+    
     <main role="main" class="container">
         <div class="row">
             <div class="col-md-8">
