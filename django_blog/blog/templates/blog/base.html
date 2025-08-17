@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Django Blog</title>
+    <link rel="stylesheet" href="/static/blog/css/style.css">
+</head>
+<body>
+    <header>
+        <h1><a href="/">Django Blog</a></h1>
+    </header>
+
+    <main>
+        {% block content %}
+        {% for post in posts %}
+            <article>
+                <h2>{{ post.title }}</h2>
+                <p>By {{ post.author }} on {{ post.published_date|date:"F d, Y" }}</p>
+                <p>{{ post.content }}</p>
+            </article>
+        {% endfor %}
+        {% endblock %}
+    </main>
+
+    <footer>
+        <p>© 2023 Django Blog</p>
+    </footer>
+
+    <script src="/static/blog/js/script.js"></script>
+</body>
+</html>
