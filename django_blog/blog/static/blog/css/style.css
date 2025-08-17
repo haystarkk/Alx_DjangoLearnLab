@@ -234,3 +234,24 @@ body {
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
+/* Tags styling */
+.badge {
+    font-size: 0.9rem;
+    padding: 0.5em 0.75em;
+    margin-right: 0.5em;
+    transition: all 0.2s;
+}
+
+.badge:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+}
+
+/* Search form styling */
+.search-form {
+    max-width: 400px;
+}
+
+.search-form .input-group {
+    width: 100%;
+}
